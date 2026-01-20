@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { 
-  LayoutDashboard, 
-  Activity, 
-  BarChart3, 
-  ShieldCheck, 
+import {
+  LayoutDashboard,
+  Activity,
+  BarChart3,
+  ShieldCheck,
   Zap,
   LogOut,
   Calendar,
@@ -68,7 +68,7 @@ const App: React.FC = () => {
   const [isOfflineMode, setIsOfflineMode] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [dataSource, setDataSource] = useState<'default' | 'csv'>('default');
-  
+
   // Business Economics State
   const [userCogs, setUserCogs] = useState(0.60); // 60% default
   const [showCalc, setShowCalc] = useState(false);
@@ -85,7 +85,7 @@ const App: React.FC = () => {
   // Activity History / Ledger State
   const [activityFilter, setActivityFilter] = useState<ActivityFilter>('all');
   const [revertingIds, setRevertingIds] = useState<Set<string>>(new Set());
-  
+
   const [ledgerData, setLedgerData] = useState<LedgerItem[]>([
     { id: 'l1', date: '2026-01-18 14:22', campaign: 'Competitor_Search', action: 'Stopped Loss', agent: 'Safety Net', impact: '+$130 Saved', type: 'protection' },
     { id: 'l2', date: '2026-01-18 09:05', campaign: 'Brand_Keywords_Alpha', action: 'Boosted Budget', agent: 'Opportunity Scout', impact: '+$450 Revenue', type: 'growth' },
@@ -127,7 +127,7 @@ const App: React.FC = () => {
     if (loading) return;
     setCampaigns(prev => prev.map(c => {
       const { margin, roas } = calculateProfitAwareMetrics(c.spend, c.revenue, userCogs);
-      
+
       let recommendation = "Maintain spend levels.";
       let riskLevel = RiskLevel.LOW;
 
@@ -158,12 +158,12 @@ const App: React.FC = () => {
     });
     await new Promise(resolve => setTimeout(resolve, 1200));
     setCampaigns(prev => prev.map(c => c.id === id ? { ...c, status: CampaignStatus.PAUSED } : c));
-    setPausingIds(prev => { 
-      const n = new Set(prev); 
-      n.delete(id); 
-      return n; 
+    setPausingIds(prev => {
+      const n = new Set(prev);
+      n.delete(id);
+      return n;
     });
-    
+
     const newEntry: LedgerItem = {
       id: Math.random().toString(36).substr(2, 9),
       date: new Date().toISOString().replace('T', ' ').substring(0, 16),
@@ -198,7 +198,7 @@ const App: React.FC = () => {
     if (lines.length < 2) throw new Error("File is empty or invalid.");
 
     const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
-    
+
     const findIndex = (searchTerms: string[]) => {
       const idx = headers.findIndex(h => searchTerms.some(term => h.toLowerCase().includes(term.toLowerCase())));
       return idx;
@@ -214,16 +214,16 @@ const App: React.FC = () => {
 
     const newCampaigns: Campaign[] = lines.slice(1).map((line, i) => {
       const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.trim().replace(/^"|"$/g, ''));
-      
+
       const name = nameIdx !== -1 ? values[nameIdx] : `Dataset ${i + 1}`;
       const spendStr = values[costIdx] || "0";
       const revenueStr = values[revenueIdx] || "0";
-      
+
       const spend = parseFloat(spendStr.replace(/[^0-9.-]+/g, "")) || 0;
       const revenue = parseFloat(revenueStr.replace(/[^0-9.-]+/g, "")) || 0;
 
       const { margin, roas } = calculateProfitAwareMetrics(spend, revenue, userCogs);
-      
+
       let recommendation = "Maintain current pacing.";
       let riskLevel = RiskLevel.LOW;
 
@@ -347,16 +347,16 @@ const App: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
         {campaigns.map(c => (
           <div key={c.id} className="h-full flex flex-col">
-            <CampaignCard 
-              campaign={c} 
-              onPause={handlePause} 
-              isPausing={pausingIds.has(c.id)} 
+            <CampaignCard
+              campaign={c}
+              onPause={handlePause}
+              isPausing={pausingIds.has(c.id)}
               isOffline={isOfflineMode}
             />
           </div>
         ))}
       </div>
-      
+
       <div className={`bg-slate-900 rounded-3xl p-10 border border-slate-800 shadow-2xl relative overflow-hidden group bg-gradient-to-br from-slate-900 to-slate-950 mt-12 ${isOfflineMode ? 'opacity-50 grayscale' : ''}`}>
         <div className="absolute top-0 right-0 w-96 h-96 bg-orange-600/5 rounded-full blur-[120px] -mr-48 -mt-48 group-hover:bg-orange-600/10 transition-colors duration-1000"></div>
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-10">
@@ -370,9 +370,9 @@ const App: React.FC = () => {
               ProfitGuard has identified <strong>14.2%</strong> in additional profit potential based on your <strong>{Math.round(userCogs * 100)}% COGS</strong>. Reinvest eliminated waste into your most profitable clusters.
             </p>
           </div>
-          <button 
-            onClick={handleApplyStrategy} 
-            disabled={isScaling || isOfflineMode} 
+          <button
+            onClick={handleApplyStrategy}
+            disabled={isScaling || isOfflineMode}
             className="shrink-0 bg-orange-600 hover:bg-orange-500 text-white px-10 py-5 rounded-2xl font-black uppercase tracking-widest text-sm transition-all flex items-center gap-4 shadow-xl shadow-orange-950/20 active:scale-95 disabled:opacity-50"
           >
             {isScaling ? <Loader2 className="w-5 h-5 animate-spin" /> : <Rocket className="w-6 h-6" />}
@@ -497,12 +497,12 @@ const App: React.FC = () => {
                   <span className="text-5xl font-black text-white">{Math.round(userCogs * 100)}%</span>
                 </div>
               </div>
-              <input 
-                type="range" min="0" max="100" step="1" value={Math.round(userCogs * 100)} 
-                onChange={(e) => { setUserCogs(Number(e.target.value) / 100); showToast("Business Model Updated"); }} 
-                className="w-full h-2 bg-slate-800 rounded-full appearance-none cursor-pointer accent-emerald-600 mb-8" 
+              <input
+                type="range" min="0" max="100" step="1" value={Math.round(userCogs * 100)}
+                onChange={(e) => { setUserCogs(Number(e.target.value) / 100); showToast("Business Model Updated"); }}
+                className="w-full h-2 bg-slate-800 rounded-full appearance-none cursor-pointer accent-emerald-600 mb-8"
               />
-              
+
               <div className="flex flex-col gap-4">
                 <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Industry Presets</p>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -512,7 +512,7 @@ const App: React.FC = () => {
                     { label: 'Retail/Resale', val: 0.65 },
                     { label: 'Dropshipping', val: 0.80 }
                   ].map(preset => (
-                    <button 
+                    <button
                       key={preset.label}
                       onClick={() => setUserCogs(preset.val)}
                       className={`px-4 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${Math.abs(userCogs - preset.val) < 0.01 ? 'bg-emerald-600 border-emerald-500 text-white shadow-lg shadow-emerald-950/20' : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-600 hover:text-white'}`}
@@ -525,14 +525,14 @@ const App: React.FC = () => {
             </div>
 
             <div className="pt-6 border-t border-slate-800">
-              <button 
+              <button
                 onClick={() => setShowCalc(!showCalc)}
                 className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-[10px] font-black uppercase tracking-widest transition-colors"
               >
                 <HelpCircle className="w-4 h-4" />
                 Don't know your cost percentage?
               </button>
-              
+
               {showCalc && (
                 <div className="mt-6 p-6 bg-slate-950/50 border border-slate-800 rounded-2xl animate-in slide-in-from-top-4 duration-300">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
@@ -540,8 +540,8 @@ const App: React.FC = () => {
                       <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-2">Item Sale Price ($)</label>
                       <div className="relative">
                         <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
-                        <input 
-                          type="number" 
+                        <input
+                          type="number"
                           value={calcPrice}
                           onChange={(e) => setCalcPrice(e.target.value)}
                           className="w-full bg-slate-900 border border-slate-800 rounded-xl px-10 py-3 text-white font-bold outline-none focus:border-blue-500/50 transition-colors"
@@ -553,8 +553,8 @@ const App: React.FC = () => {
                       <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-2">Unit Cost to Make/Buy ($)</label>
                       <div className="relative">
                         <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-600" />
-                        <input 
-                          type="number" 
+                        <input
+                          type="number"
                           value={calcCost}
                           onChange={(e) => setCalcCost(e.target.value)}
                           className="w-full bg-slate-900 border border-slate-800 rounded-xl px-10 py-3 text-white font-bold outline-none focus:border-blue-500/50 transition-colors"
@@ -563,7 +563,7 @@ const App: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                  <button 
+                  <button
                     onClick={updateCalcCogs}
                     className="mt-6 w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-black text-[10px] uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-blue-900/20"
                   >
@@ -583,7 +583,7 @@ const App: React.FC = () => {
               <p className="text-slate-500 text-sm">Automate your Stop-Loss protocols.</p>
             </div>
           </div>
-          
+
           <div className="space-y-12">
             <div>
               <div className="flex justify-between items-end mb-6">
@@ -598,10 +598,10 @@ const App: React.FC = () => {
                   <span className="text-4xl font-black text-white">{minMargin}%</span>
                 </div>
               </div>
-              <input 
-                type="range" min="0" max="50" step="1" value={minMargin} 
-                onChange={(e) => { setMinMargin(Number(e.target.value)); showToast("Rules Saved"); }} 
-                className="w-full h-2 bg-slate-800 rounded-full appearance-none cursor-pointer accent-orange-600" 
+              <input
+                type="range" min="0" max="50" step="1" value={minMargin}
+                onChange={(e) => { setMinMargin(Number(e.target.value)); showToast("Rules Saved"); }}
+                className="w-full h-2 bg-slate-800 rounded-full appearance-none cursor-pointer accent-orange-600"
               />
             </div>
 
@@ -610,8 +610,8 @@ const App: React.FC = () => {
                 <p className="font-bold text-white mb-1">Active Safety Net</p>
                 <p className="text-xs text-slate-500">Auto-pause ads when margin drops below {minMargin}%.</p>
               </div>
-              <button 
-                onClick={() => setAutoPauseEnabled(!autoPauseEnabled)} 
+              <button
+                onClick={() => setAutoPauseEnabled(!autoPauseEnabled)}
                 className={`w-14 h-7 rounded-full transition-all relative shrink-0 ${autoPauseEnabled ? 'bg-orange-600' : 'bg-slate-800'}`}
               >
                 <div className={`absolute top-1 w-5 h-5 bg-white rounded-full transition-all ${autoPauseEnabled ? 'right-1' : 'left-1'}`}></div>
@@ -624,7 +624,7 @@ const App: React.FC = () => {
   };
 
   const renderGrowthOpportunities = () => {
-    const starPerformer = campaigns.length > 0 
+    const starPerformer = campaigns.length > 0
       ? campaigns.reduce((prev, current) => (prev.margin > current.margin) ? prev : current, campaigns[0])
       : { name: 'None', margin: 0, roas: 0 };
 
@@ -641,8 +641,8 @@ const App: React.FC = () => {
                 <div className="bg-slate-950/40 p-6 rounded-2xl border border-slate-800"><p className="text-[10px] text-slate-500 uppercase mb-1">ROAS</p><p className="text-3xl font-black text-white">{starPerformer.roas.toFixed(1)}x</p></div>
                 <div className="bg-emerald-500/5 p-6 rounded-2xl border border-emerald-500/10"><p className="text-[10px] text-emerald-500/70 uppercase mb-1">Profit</p><p className="text-3xl font-black text-emerald-400">${Math.round(starPerformer.margin).toLocaleString()}</p></div>
               </div>
-              <button 
-                onClick={() => handleBoostBudget(starPerformer.name, starPerformer.margin)} 
+              <button
+                onClick={() => handleBoostBudget(starPerformer.name, starPerformer.margin)}
                 disabled={isOfflineMode}
                 className="w-full md:w-auto bg-orange-600 hover:bg-orange-500 text-white px-12 py-5 rounded-2xl font-black uppercase tracking-[0.2em] transition-all flex items-center justify-center gap-4"
               >
@@ -667,22 +667,6 @@ const App: React.FC = () => {
     );
   };
 
-  // --- Helpers ---
-
-  const SidebarItem = ({ id, icon: Icon, label, disabled = false }: { id: ViewType, icon: any, label: string, disabled?: boolean }) => (
-    <button 
-      onClick={() => !disabled && setActiveView(id)}
-      className={`w-full flex items-center gap-3 px-5 py-4 rounded-2xl transition-all relative group ${
-        activeView === id 
-        ? 'bg-orange-600 text-white shadow-xl shadow-orange-900/20 font-black' 
-        : `text-slate-500 font-bold hover:text-slate-200 ${disabled ? 'opacity-30 cursor-not-allowed' : 'hover:bg-slate-800/50'}`
-      }`}
-    >
-      <Icon className={`w-5 h-5 shrink-0 ${activeView === id ? 'text-white' : 'group-hover:text-orange-500 transition-colors'}`} />
-      <span className="truncate tracking-tight">{label}</span>
-    </button>
-  );
-
   const renderAudit = () => (
     <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-500 pb-24">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
@@ -695,15 +679,15 @@ const App: React.FC = () => {
           </h3>
           <p className="text-slate-500 text-sm mt-2 max-w-xl">Historical record of every automated intervention.</p>
         </div>
-        
+
         <div className="flex bg-slate-900 border border-slate-800 p-1.5 rounded-2xl">
           {(['all', 'protection', 'growth'] as ActivityFilter[]).map((filter) => (
             <button
               key={filter}
               onClick={() => setActivityFilter(filter)}
               className={`px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
-                activityFilter === filter 
-                ? 'bg-orange-600 text-white shadow-lg shadow-orange-950/20' 
+                activityFilter === filter
+                ? 'bg-orange-600 text-white shadow-lg shadow-orange-950/20'
                 : 'text-slate-500 hover:text-slate-300'
               }`}
             >
@@ -752,196 +736,7 @@ const App: React.FC = () => {
     </div>
   );
 
-  if (loading) {
-    return (
-      <div className="h-screen w-full flex flex-col items-center justify-center bg-[#0B1120]">
-        <div className="w-20 h-20 border-4 border-orange-600/20 border-t-orange-600 rounded-full animate-spin mb-8"></div>
-        <p className="text-orange-500 font-black text-sm tracking-[0.5em] animate-pulse uppercase">ProfitGuard Analyzing...</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen flex flex-col lg:flex-row bg-[#0B1120] text-slate-100 overflow-hidden font-sans">
-      {toast && (
-        <div className="fixed top-10 right-1/2 translate-x-1/2 lg:right-10 lg:translate-x-0 z-[110] bg-slate-900 text-white px-8 py-5 rounded-2xl shadow-2xl border border-orange-500/20 flex items-center gap-5 animate-in slide-in-from-top-12 lg:slide-in-from-right-12 duration-300">
-          <CheckCircle2 className="w-5 h-5 text-emerald-500" /><span className="text-xs font-black uppercase tracking-widest">{toast}</span>
-        </div>
-      )}
-
-      {/* Universal Import Modal */}
-      {showUploadModal && (
-        <div className="fixed inset-0 z-[150] flex items-center justify-center p-6 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-300">
-          <div className="bg-slate-900 w-full max-w-xl rounded-3xl border border-slate-800 shadow-3xl overflow-hidden relative animate-in zoom-in-95 duration-300">
-            <button 
-              onClick={() => setShowUploadModal(false)}
-              className="absolute top-6 right-6 p-2 text-slate-500 hover:text-white transition-colors"
-            >
-              <X className="w-6 h-6" />
-            </button>
-            <div className="p-10">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="bg-blue-600/20 p-3 rounded-2xl border border-blue-500/20"><UploadCloud className="w-8 h-8 text-blue-500" /></div>
-                <div>
-                  <h3 className="text-2xl font-bold text-white">Universal Data Import</h3>
-                  <p className="text-slate-500 text-sm">Upload CSV from Google, Meta, or TikTok.</p>
-                </div>
-              </div>
-              
-              <div className="space-y-6">
-                <div className="bg-slate-950/40 border border-slate-800 p-6 rounded-2xl">
-                  <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Supported Platforms</h5>
-                  <div className="flex flex-wrap gap-2">
-                    {['Google Ads', 'Meta (FB/IG)', 'TikTok', 'Pinterest'].map(col => (
-                      <span key={col} className="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-lg text-xs font-bold text-white">{col}</span>
-                    ))}
-                  </div>
-                  <p className="text-xs text-slate-500 mt-4 leading-relaxed italic">
-                    ProfitGuard auto-detects "Amount Spent" and "Revenue" columns across all major platforms.
-                  </p>
-                </div>
-
-                <div 
-                  onClick={() => fileInputRef.current?.click()}
-                  className="border-2 border-dashed border-slate-800 hover:border-blue-500/50 hover:bg-blue-500/5 transition-all rounded-3xl p-12 flex flex-col items-center justify-center cursor-pointer group"
-                >
-                  <input 
-                    type="file" 
-                    accept=".csv" 
-                    ref={fileInputRef} 
-                    className="hidden" 
-                    onChange={handleFileUpload} 
-                  />
-                  <FileText className="w-12 h-12 text-slate-700 group-hover:text-blue-500 transition-colors mb-4" />
-                  <p className="text-white font-bold mb-1">Select CSV File</p>
-                  <p className="text-slate-500 text-xs uppercase tracking-widest font-black">Or drag and drop here</p>
-                </div>
-
-                <div className="flex justify-center pt-2">
-                  <a 
-                    href="/swan_lake_sample_data.csv" 
-                    download="swan_lake_sample_data.csv"
-                    className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-[10px] font-black uppercase tracking-widest transition-colors"
-                  >
-                    <Download className="w-4 h-4" />
-                    Download Sample Cross-Platform CSV
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Sidebar */}
-      <aside className="w-full lg:w-80 bg-slate-900 flex flex-col border-b lg:border-r border-slate-800 shrink-0 shadow-2xl z-20">
-        <div className="p-10 flex flex-col gap-2 border-b border-slate-800 bg-slate-950/20">
-          <div className="flex items-center gap-3">
-            <div className="bg-orange-600 p-2.5 rounded-xl shadow-lg shadow-orange-900/40"><ShieldCheck className="w-7 h-7 text-white" /></div>
-            <span className="font-black text-2xl text-white tracking-tighter text-nowrap">ProfitGuard AI</span>
-          </div>
-          <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] ml-14">Command Center</span>
-        </div>
-        
-        <nav className="flex-1 p-8 space-y-3 overflow-y-auto scrollbar-hide">
-          <SidebarItem id="dashboard" icon={LayoutDashboard} label="Dashboard" />
-          <SidebarItem id="performance" icon={BarChart3} label="Performance" />
-          <SidebarItem id="action-plan" icon={ClipboardCheck} label="Action Plan" />
-          <SidebarItem id="audit" icon={Activity} label="Savings Ledger" />
-          <div className="pt-10 text-[10px] font-black text-slate-600 uppercase tracking-[0.2em] px-4 mb-5">Rules & Econ</div>
-          <SidebarItem id="safety-guards" icon={ShieldCheck} label="Protection Rules" />
-          <SidebarItem id="growth-opportunities" icon={TrendingUp} label="Growth Engine" />
-          <div className="pt-10 text-[10px] font-black text-slate-600 uppercase tracking-[0.2em] px-4 mb-5">Resources</div>
-          <SidebarItem id="documentation" icon={BookOpen} label="How it Works" />
-        </nav>
-
-        <div className="p-8 border-t border-slate-800 space-y-4 bg-slate-950/20">
-          <button 
-            onClick={() => setShowUploadModal(true)}
-            className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-lg shadow-blue-900/20"
-          >
-            <UploadCloud className="w-4 h-4" />
-            Import CSV
-          </button>
-          <div className={`text-[10px] font-black flex items-center gap-2 uppercase tracking-widest p-3 rounded-xl border ${isOfflineMode ? 'text-blue-400 bg-blue-500/5 border-blue-500/10' : 'text-emerald-500 bg-emerald-500/5 border-emerald-500/10'}`}>
-            <div className={`w-2 h-2 rounded-full animate-pulse ${isOfflineMode ? 'bg-blue-400' : 'bg-emerald-500'}`}></div>
-            {isOfflineMode ? 'Analysis Mode (CSV)' : 'Simulation Mode (API)'}
-          </div>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col min-w-0 bg-[#0B1120] relative">
-        <header className="h-24 bg-slate-900/50 border-b border-slate-800/50 flex items-center justify-between px-6 lg:px-12 shrink-0 z-10 backdrop-blur-xl">
-          <div className="flex flex-col">
-            <h2 className="text-xl lg:text-2xl font-black text-white uppercase tracking-tighter flex items-center gap-4">
-              ProfitGuard AI <span className="text-slate-700 hidden lg:inline">/</span> <span className="text-orange-500 hidden lg:inline">{activeView.replace('-', ' ')}</span>
-            </h2>
-            <div className="flex items-center gap-3 mt-1">
-              <p className="text-[10px] lg:text-xs font-bold text-slate-500 uppercase tracking-widest text-nowrap truncate">Universal Economics Model</p>
-              <div className="h-3 w-px bg-slate-700 mx-1 shrink-0"></div>
-              <div className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border flex items-center gap-1.5 shrink-0 ${
-                dataSource === 'csv' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-              }`}>
-                <Database className="w-3 h-3" />
-                Using: {dataSource === 'csv' ? 'Uploaded Dataset' : 'Default Data'}
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4 lg:gap-8">
-            <div className="relative">
-              <button onClick={() => setIsNotificationsOpen(!isNotificationsOpen)} className={`p-3 lg:p-4 border rounded-2xl transition-all shadow-sm ${isNotificationsOpen ? 'text-orange-500 border-orange-500/20 bg-orange-500/5' : 'text-slate-500 border-slate-700 bg-slate-800/50 hover:border-slate-500'}`}>
-                <Bell className="w-5 h-5" />
-              </button>
-              {isNotificationsOpen && (
-                <>
-                  <div className="fixed inset-0 z-40" onClick={() => setIsNotificationsOpen(false)}></div>
-                  <div className="absolute right-0 mt-5 w-64 lg:w-80 bg-slate-900 border border-slate-800 rounded-3xl shadow-3xl z-50 p-4 animate-in fade-in slide-in-from-top-4">
-                    <div className="px-5 py-3 border-b border-slate-800/50 text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">System Pulse</div>
-                    <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl mb-2">
-                      <p className="text-xs font-bold text-white">✅ Multi-Platform Support</p>
-                      <p className="text-[10px] text-emerald-500 mt-1 font-black uppercase">Parsing rules updated for Meta/TikTok</p>
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
-            
-            <div className="relative">
-              <button onClick={() => setIsProfileOpen(!isProfileOpen)} className="w-12 h-12 lg:w-14 lg:h-14 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center font-black text-white text-sm lg:text-base shadow-xl hover:scale-105 active:scale-95 transition-all">JD</button>
-              {isProfileOpen && (
-                <>
-                  <div className="fixed inset-0 z-40" onClick={() => setIsProfileOpen(false)}></div>
-                  <div className="absolute right-0 mt-5 w-48 bg-slate-900 border border-slate-800 rounded-2xl shadow-3xl z-50 p-2 animate-in fade-in slide-in-from-top-4">
-                    <button onClick={resetApp} className="w-full flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-500/10 rounded-xl text-[10px] font-black uppercase tracking-widest transition-colors"><LogOut className="w-4 h-4" /> Reset App</button>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </header>
-
-        <div className="flex-1 overflow-y-auto p-6 lg:p-12 scrollbar-hide">
-          {activeView === 'dashboard' && renderDashboard()}
-          {activeView === 'performance' && renderPerformance()}
-          {activeView === 'audit' && renderAudit()}
-          {activeView === 'documentation' && documentationView()}
-          {activeView === 'safety-guards' && renderSafetyGuards()}
-          {activeView === 'growth-opportunities' && renderGrowthOpportunities()}
-          {activeView === 'action-plan' && <ActionPlanView campaigns={campaigns} userCogs={userCogs} onShowToast={showToast} />}
-        </div>
-
-        <footer className="bg-slate-950/90 backdrop-blur-md border-t border-slate-800 px-12 py-6 flex justify-center items-center shrink-0 z-10 no-print">
-          <div className="text-[10px] lg:text-xs font-bold text-slate-500 uppercase tracking-[0.2em] flex items-center gap-2">
-            Built by <a href="https://swanlakedigital.com" target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:text-orange-400 transition-colors underline underline-offset-4 text-nowrap">Swan Lake Digital</a>
-          </div>
-        </footer>
-      </main>
-    </div>
-  );
-
-  function documentationView() {
+  const renderDocumentation = () => {
     return (
       <div className="space-y-16 animate-in slide-in-from-bottom-4 duration-500 pb-32 max-w-7xl mx-auto">
         <div className={`p-8 rounded-[2rem] border-2 flex flex-col md:flex-row items-center gap-8 shadow-2xl transition-all duration-500 ${isOfflineMode ? 'bg-blue-600/10 border-blue-500/30 shadow-blue-950/40' : 'bg-orange-600/10 border-orange-500/30 shadow-orange-950/40'}`}>
@@ -951,7 +746,7 @@ const App: React.FC = () => {
           <div className="text-center md:text-left">
             <h4 className="text-2xl font-black text-white uppercase tracking-tight mb-2">{isOfflineMode ? 'Universal Dataset Active' : 'Simulation Mode Active'}</h4>
             <p className="text-slate-400 text-lg leading-relaxed">
-              ProfitGuard is currently auditing data using your <strong>{Math.round(userCogs * 100)}% COGS</strong> model. 
+              ProfitGuard is currently auditing data using your <strong>{Math.round(userCogs * 100)}% COGS</strong> model.
               {isOfflineMode ? ' Our parser has normalized your multi-platform data into a unified dashboard.' : ' You are in a safe sandbox connected via simulated API.'}
             </p>
           </div>
@@ -1025,7 +820,7 @@ const App: React.FC = () => {
 
         <div className="bg-gradient-to-br from-slate-900 to-slate-950 rounded-[2.5rem] p-12 border border-slate-800 shadow-3xl relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-600/5 rounded-full blur-[120px] -mr-64 -mt-64 group-hover:bg-orange-600/10 transition-colors duration-1000"></div>
-          
+
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
               <div className="flex items-center gap-3 mb-6 text-orange-500">
@@ -1047,7 +842,7 @@ const App: React.FC = () => {
                 </div>
               </div>
             </div>
-            
+
             <div className="bg-slate-950/50 border border-slate-800 p-8 rounded-3xl backdrop-blur-sm">
               <div className="flex items-center gap-4 mb-8">
                 <div className="bg-orange-600 p-2 rounded-xl shadow-lg shadow-orange-900/40"><FileText className="w-6 h-6 text-white" /></div>
@@ -1056,7 +851,7 @@ const App: React.FC = () => {
               <p className="text-slate-300 text-sm leading-relaxed italic mb-8 border-l-4 border-orange-600 pl-6 py-2">
                 "Our normalized reports remove technical jargon. Instead of 'ROAS < 1.0', we tell your stakeholders: '[STOP] This campaign is actively losing money.' Clean business communication wins."
               </p>
-              <button 
+              <button
                 onClick={() => setActiveView('action-plan')}
                 className="w-full bg-orange-600 hover:bg-orange-500 text-white font-black uppercase tracking-widest text-[10px] py-4 rounded-xl transition-all flex items-center justify-center gap-3 shadow-xl shadow-orange-950/20"
               >
@@ -1067,7 +862,212 @@ const App: React.FC = () => {
         </div>
       </div>
     );
+  };
+
+  // --- Helpers ---
+
+  const SidebarItem = ({ id, icon: Icon, label, disabled = false }: { id: ViewType, icon: any, label: string, disabled?: boolean }) => (
+    <button
+      onClick={() => !disabled && setActiveView(id)}
+      className={`w-full flex items-center gap-3 px-5 py-4 rounded-2xl transition-all relative group ${
+        activeView === id
+        ? 'bg-orange-600 text-white shadow-xl shadow-orange-900/20 font-black'
+        : `text-slate-500 font-bold hover:text-slate-200 ${disabled ? 'opacity-30 cursor-not-allowed' : 'hover:bg-slate-800/50'}`
+      }`}
+    >
+      <Icon className={`w-5 h-5 shrink-0 ${activeView === id ? 'text-white' : 'group-hover:text-orange-500 transition-colors'}`} />
+      <span className="truncate tracking-tight">{label}</span>
+    </button>
+  );
+
+  if (loading) {
+    return (
+      <div className="h-screen w-full flex flex-col items-center justify-center bg-[#0B1120]">
+        <div className="w-20 h-20 border-4 border-orange-600/20 border-t-orange-600 rounded-full animate-spin mb-8"></div>
+        <p className="text-orange-500 font-black text-sm tracking-[0.5em] animate-pulse uppercase">ProfitGuard Analyzing...</p>
+      </div>
+    );
   }
+
+  return (
+    <div className="min-h-screen flex flex-col lg:flex-row bg-[#0B1120] text-slate-100 overflow-hidden font-sans">
+      {toast && (
+        <div className="fixed top-10 right-1/2 translate-x-1/2 lg:right-10 lg:translate-x-0 z-[110] bg-slate-900 text-white px-8 py-5 rounded-2xl shadow-2xl border border-orange-500/20 flex items-center gap-5 animate-in slide-in-from-top-12 lg:slide-in-from-right-12 duration-300">
+          <CheckCircle2 className="w-5 h-5 text-emerald-500" /><span className="text-xs font-black uppercase tracking-widest">{toast}</span>
+        </div>
+      )}
+
+      {/* Universal Import Modal */}
+      {showUploadModal && (
+        <div className="fixed inset-0 z-[150] flex items-center justify-center p-6 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="bg-slate-900 w-full max-w-xl rounded-3xl border border-slate-800 shadow-3xl overflow-hidden relative animate-in zoom-in-95 duration-300">
+            <button
+              onClick={() => setShowUploadModal(false)}
+              className="absolute top-6 right-6 p-2 text-slate-500 hover:text-white transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            <div className="p-10">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="bg-blue-600/20 p-3 rounded-2xl border border-blue-500/20"><UploadCloud className="w-8 h-8 text-blue-500" /></div>
+                <div>
+                  <h3 className="text-2xl font-bold text-white">Universal Data Import</h3>
+                  <p className="text-slate-500 text-sm">Upload CSV from Google, Meta, or TikTok.</p>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                <div className="bg-slate-950/40 border border-slate-800 p-6 rounded-2xl">
+                  <h5 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Supported Platforms</h5>
+                  <div className="flex flex-wrap gap-2">
+                    {['Google Ads', 'Meta (FB/IG)', 'TikTok', 'Pinterest'].map(col => (
+                      <span key={col} className="px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-lg text-xs font-bold text-white">{col}</span>
+                    ))}
+                  </div>
+                  <p className="text-xs text-slate-500 mt-4 leading-relaxed italic">
+                    ProfitGuard auto-detects "Amount Spent" and "Revenue" columns across all major platforms.
+                  </p>
+                </div>
+
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  className="border-2 border-dashed border-slate-800 hover:border-blue-500/50 hover:bg-blue-500/5 transition-all rounded-3xl p-12 flex flex-col items-center justify-center cursor-pointer group"
+                >
+                  <input
+                    type="file"
+                    accept=".csv"
+                    ref={fileInputRef}
+                    className="hidden"
+                    onChange={handleFileUpload}
+                  />
+                  <FileText className="w-12 h-12 text-slate-700 group-hover:text-blue-500 transition-colors mb-4" />
+                  <p className="text-white font-bold mb-1">Select CSV File</p>
+                  <p className="text-slate-500 text-xs uppercase tracking-widest font-black">Or drag and drop here</p>
+                </div>
+
+                <div className="flex justify-center pt-2">
+                  <a
+                    href="/swan_lake_sample_data.csv"
+                    download="swan_lake_sample_data.csv"
+                    className="flex items-center gap-2 text-blue-400 hover:text-blue-300 text-[10px] font-black uppercase tracking-widest transition-colors"
+                  >
+                    <Download className="w-4 h-4" />
+                    Download Sample Cross-Platform CSV
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Sidebar */}
+      <aside className="w-full lg:w-80 bg-slate-900 flex flex-col border-b lg:border-r border-slate-800 shrink-0 shadow-2xl z-20">
+        <div className="p-10 flex flex-col gap-2 border-b border-slate-800 bg-slate-950/20">
+          <div className="flex items-center gap-3">
+            <div className="bg-orange-600 p-2.5 rounded-xl shadow-lg shadow-orange-900/40"><ShieldCheck className="w-7 h-7 text-white" /></div>
+            <span className="font-black text-2xl text-white tracking-tighter text-nowrap">ProfitGuard AI</span>
+          </div>
+          <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] ml-14">Command Center</span>
+        </div>
+
+        <nav className="flex-1 p-8 space-y-3 overflow-y-auto scrollbar-hide">
+          <SidebarItem id="dashboard" icon={LayoutDashboard} label="Dashboard" />
+          <SidebarItem id="performance" icon={BarChart3} label="Performance" />
+          <SidebarItem id="action-plan" icon={ClipboardCheck} label="Action Plan" />
+          <SidebarItem id="audit" icon={Activity} label="Savings Ledger" />
+          <div className="pt-10 text-[10px] font-black text-slate-600 uppercase tracking-[0.2em] px-4 mb-5">Rules & Econ</div>
+          <SidebarItem id="safety-guards" icon={ShieldCheck} label="Protection Rules" />
+          <SidebarItem id="growth-opportunities" icon={TrendingUp} label="Growth Engine" />
+          <div className="pt-10 text-[10px] font-black text-slate-600 uppercase tracking-[0.2em] px-4 mb-5">Resources</div>
+          <SidebarItem id="documentation" icon={BookOpen} label="How it Works" />
+        </nav>
+
+        <div className="p-8 border-t border-slate-800 space-y-4 bg-slate-950/20">
+          <button
+            onClick={() => setShowUploadModal(true)}
+            className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-lg shadow-blue-900/20"
+          >
+            <UploadCloud className="w-4 h-4" />
+            Import CSV
+          </button>
+          <div className={`text-[10px] font-black flex items-center gap-2 uppercase tracking-widest p-3 rounded-xl border ${isOfflineMode ? 'text-blue-400 bg-blue-500/5 border-blue-500/10' : 'text-emerald-500 bg-emerald-500/5 border-emerald-500/10'}`}>
+            <div className={`w-2 h-2 rounded-full animate-pulse ${isOfflineMode ? 'bg-blue-400' : 'bg-emerald-500'}`}></div>
+            {isOfflineMode ? 'Analysis Mode (CSV)' : 'Simulation Mode (API)'}
+          </div>
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 flex flex-col min-w-0 bg-[#0B1120] relative">
+        <header className="h-24 bg-slate-900/50 border-b border-slate-800/50 flex items-center justify-between px-6 lg:px-12 shrink-0 z-10 backdrop-blur-xl">
+          <div className="flex flex-col">
+            <h2 className="text-xl lg:text-2xl font-black text-white uppercase tracking-tighter flex items-center gap-4">
+              ProfitGuard AI <span className="text-slate-700 hidden lg:inline">/</span> <span className="text-orange-500 hidden lg:inline">{activeView.replace('-', ' ')}</span>
+            </h2>
+            <div className="flex items-center gap-3 mt-1">
+              <p className="text-[10px] lg:text-xs font-bold text-slate-500 uppercase tracking-widest text-nowrap truncate">Universal Economics Model</p>
+              <div className="h-3 w-px bg-slate-700 mx-1 shrink-0"></div>
+              <div className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border flex items-center gap-1.5 shrink-0 ${
+                dataSource === 'csv' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+              }`}>
+                <Database className="w-3 h-3" />
+                Using: {dataSource === 'csv' ? 'Uploaded Dataset' : 'Default Data'}
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4 lg:gap-8">
+            <div className="relative">
+              <button onClick={() => setIsNotificationsOpen(!isNotificationsOpen)} className={`p-3 lg:p-4 border rounded-2xl transition-all shadow-sm ${isNotificationsOpen ? 'text-orange-500 border-orange-500/20 bg-orange-500/5' : 'text-slate-500 border-slate-700 bg-slate-800/50 hover:border-slate-500'}`}>
+                <Bell className="w-5 h-5" />
+              </button>
+              {isNotificationsOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setIsNotificationsOpen(false)}></div>
+                  <div className="absolute right-0 mt-5 w-64 lg:w-80 bg-slate-900 border border-slate-800 rounded-3xl shadow-3xl z-50 p-4 animate-in fade-in slide-in-from-top-4">
+                    <div className="px-5 py-3 border-b border-slate-800/50 text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">System Pulse</div>
+                    <div className="p-4 bg-emerald-500/5 border border-emerald-500/10 rounded-2xl mb-2">
+                      <p className="text-xs font-bold text-white">✅ Multi-Platform Support</p>
+                      <p className="text-[10px] text-emerald-500 mt-1 font-black uppercase">Parsing rules updated for Meta/TikTok</p>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="relative">
+              <button onClick={() => setIsProfileOpen(!isProfileOpen)} className="w-12 h-12 lg:w-14 lg:h-14 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center font-black text-white text-sm lg:text-base shadow-xl hover:scale-105 active:scale-95 transition-all">JD</button>
+              {isProfileOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setIsProfileOpen(false)}></div>
+                  <div className="absolute right-0 mt-5 w-48 bg-slate-900 border border-slate-800 rounded-2xl shadow-3xl z-50 p-2 animate-in fade-in slide-in-from-top-4">
+                    <button onClick={resetApp} className="w-full flex items-center gap-3 px-4 py-3 text-red-400 hover:bg-red-500/10 rounded-xl text-[10px] font-black uppercase tracking-widest transition-colors"><LogOut className="w-4 h-4" /> Reset App</button>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </header>
+
+        <div className="flex-1 overflow-y-auto p-6 lg:p-12 scrollbar-hide">
+          {activeView === 'dashboard' && renderDashboard()}
+          {activeView === 'performance' && renderPerformance()}
+          {activeView === 'audit' && renderAudit()}
+          {activeView === 'documentation' && renderDocumentation()}
+          {activeView === 'safety-guards' && renderSafetyGuards()}
+          {activeView === 'growth-opportunities' && renderGrowthOpportunities()}
+          {activeView === 'action-plan' && <ActionPlanView campaigns={campaigns} userCogs={userCogs} onShowToast={showToast} />}
+        </div>
+
+        <footer className="bg-slate-950/90 backdrop-blur-md border-t border-slate-800 px-12 py-6 flex justify-center items-center shrink-0 z-10 no-print">
+          <div className="text-[10px] lg:text-xs font-bold text-slate-500 uppercase tracking-[0.2em] flex items-center gap-2">
+            Built by <a href="https://swanlakedigital.com" target="_blank" rel="noopener noreferrer" className="text-orange-500 hover:text-orange-400 transition-colors underline underline-offset-4 text-nowrap">Swan Lake Digital</a>
+          </div>
+        </footer>
+      </main>
+    </div>
+  );
 };
 
 export default App;
