@@ -37,3 +37,24 @@ VITE_GOOGLE_ADS_CLIENT_SECRET=your_client_secret_here
 VITE_GOOGLE_ADS_DEVELOPER_TOKEN=your_developer_token_here
 VITE_GOOGLE_ADS_REFRESH_TOKEN=your_generated_refresh_token_here
 VITE_GOOGLE_ADS_CUSTOMER_ID=your_target_customer_id
+```
+## 5. Enabling Live Mode in Code
+By default, ProfitGuard ships in Simulation Mode so the UI works immediately without credentials.
+
+To switch to Live API Mode:
+
+Open the file services/adsService.ts.
+
+Locate the configuration flag at the top of the file.
+
+Change USE_LIVE_API from false to true.
+
+TypeScript
+
+// services/adsService.ts
+
+// CHANGE THIS TO TRUE TO ENABLE REAL DATA
+export const USE_LIVE_API = true; 
+Note: If you revert this to false, the app will seamlessly fallback to using the mock data generator for demonstration purposes.
+
+Security Note: Never commit your .env file or hardcode API tokens in public repositories.
