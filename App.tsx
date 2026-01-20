@@ -965,7 +965,9 @@ const App: React.FC = () => {
       <aside className="w-full lg:w-80 bg-slate-900 flex flex-col border-b lg:border-r border-slate-800 shrink-0 shadow-2xl z-20">
         <div className="p-10 flex flex-col gap-2 border-b border-slate-800 bg-slate-950/20">
           <div className="flex items-center gap-3">
-            <div className="bg-orange-600 p-2.5 rounded-xl shadow-lg shadow-orange-900/40"><ShieldCheck className="w-7 h-7 text-white" /></div>
+            {/* Logo Replacement */}
+          <img src="/profitguard-logo-256px.png" alt="ProfitGuard AI" className="w-12 h-12 rounded-full shadow-lg shadow-orange-500/20 hover:scale-105 transition-transform"
+            />
             <span className="font-black text-2xl text-white tracking-tighter text-nowrap">ProfitGuard AI</span>
           </div>
           <span className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] ml-14">Command Center</span>
