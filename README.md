@@ -2,10 +2,9 @@
   <img src="public/profitguard-logo-256px.png" alt="ProfitGuard AI Logo" width="150" />
   <br />
 </div>
-
 # Swan Lake AI: ProfitGuard (Automated Margin Protection)
 
-[![Vercel Deploy](https://vercel.com/)](https://profit-guard-ai.vercel.app/)
+[![Deploy with Vercel](https://img.shields.io/badge/Vercel-Live_Demo-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://profit-guard-ai.vercel.app/)
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Simulation Mode](https://img.shields.io/badge/Simulation_Mode-Active-emerald?style=for-the-badge)](https://profit-guard-ai.vercel.app/)
