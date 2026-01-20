@@ -849,7 +849,7 @@ const App: React.FC = () => {
                 <h4 className="text-xl font-bold text-white">Strategy Tip</h4>
               </div>
               <p className="text-slate-300 text-sm leading-relaxed italic mb-8 border-l-4 border-orange-600 pl-6 py-2">
-                "Our normalized reports remove technical jargon. Instead of 'ROAS < 1.0', we tell your stakeholders: '[STOP] This campaign is actively losing money.' Clean business communication wins."
+                "Our normalized reports remove technical jargon. Instead of 'ROAS &lt; 1.0', we tell your stakeholders: '[STOP] This campaign is actively losing money.' Clean business communication wins."
               </p>
               <button
                 onClick={() => setActiveView('action-plan')}
