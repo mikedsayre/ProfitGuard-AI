@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProfitGuard AI - Automated Margin Protection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes pulse-orange {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        .animate-pulse-orange {
+            animation: pulse-orange 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Print Logic */
+        @media print {
+            aside, header, footer, button, .no-print {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            main {
+                padding: 0 !important;
+                margin: 0 !important;
+                background: white !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            .rounded-3xl, .rounded-[2rem], .rounded-[2.5rem] {
+                border-radius: 0.5rem !important;
+            }
+            .shadow-sm, .shadow-xl, .shadow-2xl, .shadow-3xl {
+                box-shadow: none !important;
+                border: 1px solid #e2e8f0 !important;
+            }
+            * {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+        }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@19.0.0",
+    "react-dom": "https://esm.sh/react-dom@19.0.0",
+    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.460.0?external=react",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "open": "https://esm.sh/open@^11.0.0"
+  }
+}
+</script>
+</head>
+<body class="bg-[#0B1120] text-slate-100">
+    <!-- Print-Only Header -->
+    <div class="hidden print-only p-10 border-b-2 border-slate-900 mb-10 text-black">
+        <h1 style="font-size: 24px; font-weight: 900; margin-bottom: 5px;">PROFITGUARD AI AUDIT REPORT</h1>
+        <p style="font-size: 12px; color: #64748b;">Generated on: <span id="print-date"></span></p>
+    </div>
+    <div id="root"></div>
+    <script>
+        // Set the print date only when the element exists
+        window.addEventListener('DOMContentLoaded', () => {
+            const el = document.getElementById('print-date');
+            if (el) el.innerText = new Date().toLocaleString();
+        });
+    </script>
+</body>
+</html>
