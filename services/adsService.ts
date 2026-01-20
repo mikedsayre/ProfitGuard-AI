@@ -1,5 +1,10 @@
 import { Campaign, CampaignStatus, RiskLevel } from '../types';
 
+// --- CONFIGURATION ---
+// Set to true only if you have configured .env locally with real Google Ads credentials
+// KEEP THIS FALSE FOR THE LIVE PORTFOLIO DEMO
+export const USE_LIVE_API = false; 
+
 export const calculateProfitAwareMetrics = (spend: number, revenue: number, cogsRate: number): { margin: number; roas: number } => {
   const roas = spend > 0 ? revenue / spend : 0;
   const netProfit = revenue - (revenue * cogsRate) - spend;
