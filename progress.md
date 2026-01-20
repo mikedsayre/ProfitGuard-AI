@@ -1,46 +1,30 @@
-# Project Progress: ProfitGuard AI
+# 🚧 Development Progress Log
 
-## 📝 Overview
-ProfitGuard AI is a "Profit-Aware" cross-platform management dashboard focusing on **Profitability over ROAS**.
+## Phase 1: Core Logic & UI (✅ Completed)
+- [x] **Project Setup**: Vite + React + TypeScript + Tailwind CSS initialized.
+- [x] **UI Framework**: Dashboard layout, Sidebar, and "Dark Mode" aesthetic implemented.
+- [x] **Business Logic**: `calculateProfitAwareMetrics` function created to handle COGS/Margin math.
+- [x] **Campaign Cards**: Visual cards displaying ROAS, Margin, and Risk Levels.
 
----
+## Phase 2: Advanced Features (✅ Completed)
+- [x] **Action Plan View**:
+    - [x] "Insight Cards" for Stopping Loss, Strategy Alerts, and Budget Shifts.
+    - [x] Logic to detect negative margin campaigns.
+- [x] **Reporting Engine**:
+    - [x] "Copy to Clipboard" functionality for text-based audit reports.
+- [x] **Universal CSV Import**:
+    - [x] Regex-based column detection for Google/Meta/TikTok CSVs.
+    - [x] Error handling for invalid file formats.
 
-## ✅ Completed Milestones
-- [x] **v1.0.0**: Basic logic engine with COGS-aware calculations.
-- [x] **v1.1.0**: **User-Centric Redesign**.
-- [x] **v1.2.0**: **Storytelling Performance View**.
-- [x] **v1.3.0**: **Intuitive Protection Rules**.
-- [x] **v1.4.0**: **Dashboard Optimization & Visual Density**.
-- [x] **v1.5.0**: **CSV Upload & Offline Analysis Mode**.
-- [x] **v1.6.0**: **Advanced COGS Engine & Industry Presets**.
-- [x] **v1.7.0**: **Developer Tooling & Finalization**.
-- [x] **v1.8.0**: **Sample Data & Demo Tooling**.
-- [x] **v1.9.0**: **Comprehensive Documentation Overhaul**.
-- [x] **v1.9.1**: **UX Contrast & Data Origin Feedback**.
-- [x] **v2.0.0**: **Intelligence Layer: Action Plan**.
-- [x] **v2.1.0**: **Universal Platform Update**.
-- [x] **v2.2.0 (Current)**: **Communication Layer: Copy Report**.
-  - [x] **Text-Based Export**: Replaced brittle PDF export with a robust "Copy Report" workflow.
-  - [x] **Formatted Reporting**: Implemented `generateReportText` logic to build structured plaintext audit findings.
-  - [x] **Fallback Preview**: Added a modal preview/manual copy system for high reliability.
-  - [x] **Cross-Platform Normalization**: Updated reporting terminology to support Google, Meta, and TikTok unified views.
+## Phase 3: Deployment & Refinement (✅ Completed)
+- [x] **Bug Fixes**:
+    - [x] Fixed "Unexpected Token" errors in `App.tsx`.
+    - [x] Resolved React mounting issues in `index.html`.
+- [x] **Deployment**:
+    - [x] Application successfully deployed to Vercel.
+    - [x] **Live URL:** [https://profit-guard-ai.vercel.app/](https://profit-guard-ai.vercel.app/)
 
----
-
-## 🏗️ Current Status: `v2.2.0 Advisor Mode`
-The application now focuses on making audit findings shareable. By moving away from PDF generation to formatted text, we enable users to instantly move ProfitGuard insights into Slack, Email, or CRM systems.
-
----
-
-## 🚀 Next Steps
-1. **AI Strategy Narratives**:
-   - [ ] Integrate LLM to generate natural language summaries of campaign performance trends.
-2. **Multi-Account View**:
-   - [ ] Implement a Manager-level view for agencies managing multiple Customer IDs.
-
----
-
-## 🛠️ Build Specs
-- **Framework**: React (v19) via ESM.sh
-- **Styling**: Tailwind CSS (Standard)
-- **Design Philosophy**: High-density information, conversational status updates, and professional "SaaS" aesthetics.
+## Phase 4: Future Roadmap (TODO)
+- [ ] **Real API Integration**: Connect to Google Ads API for live data fetching.
+- [ ] **Auth System**: Add user login/signup via Firebase or Supabase.
+- [ ] **Persistance**: Save user COGS settings and uploaded data to local storage or database.
