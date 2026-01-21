@@ -47,6 +47,33 @@ Model complex business economics with one-click presets for **SaaS**, **Manufact
 
 ---
 
+## 💻 Local Development
+
+Want to run ProfitGuard locally or contribute?
+
+1.  **Clone the repo:**
+    ```bash
+    git clone [https://github.com/mikedsayre/ProfitGuard-AI.git](https://github.com/mikedsayre/ProfitGuard-AI.git)
+    cd ProfitGuard-AI
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Start the dev server:**
+    ```bash
+    npm run dev
+    ```
+
+4.  **Build for production:**
+    ```bash
+    npm run build
+    ```
+
+---
+
 ## 👨‍💻 About the Author
 
 **Built by Mike Sayre - Swan Lake Digital**
